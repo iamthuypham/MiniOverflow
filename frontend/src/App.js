@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, withRouter } from 'react-router-dom';
 
 import Category from './category/Category';
+import PostsByCategory from './post/PostsByCategory';
 import { fetchCategories } from './category/action';
 
 class App extends Component {
@@ -19,15 +19,18 @@ class App extends Component {
   }
 
   render() {
-    const { isFetching, categories } = this.props
+    const { isFetching, categories, location } = this.props
     return (
       <div className='App'>
       	<header>
-          <a href='/categories'>Home</a>
+          <Link to='/categories'>Home</Link>
       	  {!isFetching && categories.categories.map((category) => 
-      		 <Category key={category.name} categoryName={category.name}/>      
+      		 <Category key={category.name} categoryName={category.name} categoryPath={category.path}/>      
     	  )}
         </header>
+		<main>
+			<Route exact path='/:categories/posts' component={PostsByCategory}/>
+		</main>
       </div>
     )
   }
