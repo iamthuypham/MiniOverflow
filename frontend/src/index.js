@@ -3,17 +3,13 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-
-import createHistory from 'history/createBrowserHistory';
-import { ConnectedRouter, routerReducer, routerMiddleware, push} from 'react-router-redux'
+import { Route, BrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import rootReducer from './root_reducer';
 import registerServiceWorker from './registerServiceWorker';
 
-const history = createHistory()
-
-const middleware = applyMiddleware(thunk, routerMiddleware(history));
+const middleware = applyMiddleware(thunk);
 
 const store = createStore(
 	rootReducer,
@@ -21,7 +17,7 @@ const store = createStore(
 );
 
 ReactDOM.render(
-  <Provider store = {store}><ConnectedRouter history={history}><App/></ConnectedRouter></Provider>, document.getElementById('root'));          
+  <Provider store = {store}><BrowserRouter><Route component={App}/></BrowserRouter></Provider>, document.getElementById('root'));          
 registerServiceWorker();
 
 
