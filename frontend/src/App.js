@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Route, Link, withRouter } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 
 import Category from './category/Category';
 import PostsByCategory from './post/PostsByCategory';
