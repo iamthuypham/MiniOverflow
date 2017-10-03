@@ -4,7 +4,7 @@ import {
   GET_POSTS_BY_CATEGORY,
 } from './action'
 
-function getPostsByCategoriesReducer (state={
+function getPostsByCategoryReducer (state={
     isFetching: true,
     posts: []
   }, action) {
@@ -22,5 +22,5 @@ function getPostsByCategoriesReducer (state={
 }
 
 export default combineReducers({
-  getPostsByCategoriesReducer
+  getPostsByCategoryReducer
 })
