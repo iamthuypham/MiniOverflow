@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Category = props => (
   <Link to={`/${props.categoryPath}/posts`}>{props.categoryName}</Link>
