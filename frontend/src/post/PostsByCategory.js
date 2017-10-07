@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Link } from 'react-router-dom';
 
-import Post from './Post';
+import PostItem from './PostItem';
 import { fetchPostsByCategory } from './action';
 
 class PostsByCategory extends Component {
@@ -11,22 +11,22 @@ class PostsByCategory extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.location.pathname !== nextProps.location.pathname) {
-      	const nextCategoryParam = nextProps.match.params.categories
-    	nextProps.dispatchFetchPostsByCategories(nextCategoryParam)
+      	const nextCategoryNameParam = nextProps.match.params.category
+    	nextProps.dispatchFetchPostsByCategories(nextCategoryNameParam)
     }
   }
   componentDidMount() {    
-    const categoryParam = this.props.match.params.categories
-    this.props.dispatchFetchPostsByCategories(categoryParam)
+    const categoryNameParam = this.props.match.params.category
+    this.props.dispatchFetchPostsByCategories(categoryNameParam)
   }
 
   render() {
     const { isFetching, posts, location } = this.props
-    console.log(this.props)
+    const categoryNameParam = this.props.match.params.category
     return (
       <div>
       	{!isFetching && posts.map((post) => 
-             <Post key={post.id} post={post}/>      
+             <PostItem key={post.id} post={post} categoryOfThisPost={categoryNameParam}/>      
         )}
       </div>
     )
@@ -42,7 +42,7 @@ function mapStateToProps (state) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  	dispatchFetchPostsByCategories: (category) => dispatch(fetchPostsByCategory(category))
+  	dispatchFetchPostsByCategories: (categoryName) => dispatch(fetchPostsByCategory(categoryName))
 })
 
 export default connect(

@@ -4,6 +4,7 @@ import { Route, Link } from 'react-router-dom';
 
 import Category from './category/Category';
 import PostsByCategory from './post/PostsByCategory';
+import PostWithComments from './post/PostWithComments';
 import { fetchCategories } from './category/action';
 
 class App extends Component {
@@ -28,7 +29,8 @@ class App extends Component {
     	  )}
         </header>
 		<main>
-			<Route exact path='/:categories/posts' component={PostsByCategory}/>
+			<Route exact path='/:category' component={PostsByCategory}/>
+			<Route exact path='/:category/:post_id' component={PostWithComments}/>
 		</main>
       </div>
     )
