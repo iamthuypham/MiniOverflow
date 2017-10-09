@@ -29,7 +29,7 @@ class App extends Component {
     	  )}
         </header>
 		<main>
-			<Route exact path='/:category' component={PostsByCategory}/>
+			<Route exact path='/:category' render={(props)=><PostsByCategory categories={categories} routing={props}/>}/>
 			<Route exact path='/:category/:post_id' component={PostWithComments}/>
 		</main>
       </div>
