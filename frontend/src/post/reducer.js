@@ -2,7 +2,8 @@ import { combineReducers } from 'redux'
 
 import {
   GET_POSTS_BY_CATEGORY,
-  GET_ONE_POSTS
+  GET_ONE_POSTS,
+  ADD_POST,
 } from './action'
 
 function getPostsByCategoryReducer (state={
@@ -36,8 +37,33 @@ function getOnePostReducer (state={
       return state
   }
 }
+function addPostReducer (state={
+    isAdded: false,
+    posts: []
+  }, action) {
+  const { response, post, posts } = action
+  if (post) {
+    post.deleted = response.deleted
+    post.voteScore = response.voteScore
+  }
+  switch (action.type) {
+    case ADD_POST:
+      return Object.assign({}, state, {
+        isAdded: true,
+        posts:[
+          ...posts, 
+          post: {
+          ...state,
+          },          
+        ]
+      })
+    default:
+      return state
+  }
+}
 
 export default combineReducers({
   getPostsByCategoryReducer,
-  getOnePostReducer
+  getOnePostReducer,
+  addPostReducer
 })
