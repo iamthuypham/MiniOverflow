@@ -23,12 +23,13 @@ class App extends Component {
     return (
       <div className='App'>
       	<header>
-          <Link to='/categories'>Home</Link>
+          <Link to='/'>Home</Link>
       	  {!isFetching && categories.categories.map((category) => 
       		 <Category key={category.name} categoryName={category.name} categoryPath={category.path}/>      
     	  )}
         </header>
 		<main>
+			<Route exact path='/' render={(props)=><PostsByCategory categories={categories} routing={props}/>}/>
 			<Route exact path='/:category' render={(props)=><PostsByCategory categories={categories} routing={props}/>}/>
 			<Route exact path='/:category/:post_id' component={PostWithComments}/>
 		</main>
