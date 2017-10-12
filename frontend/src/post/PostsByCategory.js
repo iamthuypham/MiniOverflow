@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Route, Link } from 'react-router-dom';
 
 import PostItem from './PostItem';
-import { fetchPostsByCategory } from './action';
+import { fetchAllPosts, fetchPostsByCategory } from './action';
 import { fetchAddPost } from './action';
 import PostForm from './PostForm';
 
@@ -28,6 +28,7 @@ class PostsByCategory extends Component {
   componentDidMount() {    
     const categoryNameParam = this.props.routing.match.params.category
     this.props.dispatchFetchPostsByCategories(categoryNameParam)
+    this.props.dispatchFetchAllPosts()
   }
   handlePostForm() {
   	this.setState({openPostForm: !this.state.openPostForm})
@@ -37,7 +38,8 @@ class PostsByCategory extends Component {
   }
 
   render() {
-    const { isFetching, posts, location, categories } = this.props
+    const { isFetching, posts, location, categories, allPosts } = this.props
+    console.log(allPosts)
     const categoryNameParam = this.props.routing.match.params.category
     console.log(this.props)
     return (
@@ -56,11 +58,14 @@ class PostsByCategory extends Component {
 
 function mapStateToProps (state, ownProps) {
   console.log(state)
+  console.log(ownProps)
   const { isFetching } = state.PostReducer.getPostsByCategoryReducer
   const { isAdded } = state.PostReducer.addPostReducer
+  const allPosts = state.PostReducer.getAllPostsReducer.posts
   let posts;
-  
-  if (isAdded) {
+  if (ownProps.routing.match.path === '/'){
+  	posts = allPosts
+  } else if (isAdded) {
     posts = state.PostReducer.addPostReducer.posts.filter(post => post.category === ownProps.routing.match.params.category)
   } else {
   	posts = state.PostReducer.getPostsByCategoryReducer.posts
@@ -69,6 +74,7 @@ function mapStateToProps (state, ownProps) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+  	dispatchFetchAllPosts: () => dispatch(fetchAllPosts()),
   	dispatchFetchPostsByCategories: (categoryName) => dispatch(fetchPostsByCategory(categoryName)),
   	dispatchFetchAddPost: (post, posts) => dispatch(fetchAddPost(post, posts))
 })

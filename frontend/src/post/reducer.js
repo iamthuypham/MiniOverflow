@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux'
 
 import {
+  GET_ALL_POSTS,
   GET_POSTS_BY_CATEGORY,
-  GET_ONE_POSTS,
+  GET_ONE_POST,
   ADD_POST,
 } from './action'
 
@@ -21,14 +22,29 @@ function getPostsByCategoryReducer (state={
       return state
   }
 }
-
+function getAllPostsReducer (state={
+    isFetching: true,
+    posts: []
+  }, action) {
+  const { posts } = action
+  console.log(posts)
+  switch (action.type) {
+    case GET_ALL_POSTS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        posts
+      })
+    default:
+      return state
+  }
+}
 function getOnePostReducer (state={
     isFetching: true,
     post: []
   }, action) {
   const { post } = action
   switch (action.type) {
-    case GET_ONE_POSTS:
+    case GET_ONE_POST:
       return Object.assign({}, state, {
         isFetching: false,
         post
@@ -65,5 +81,6 @@ function addPostReducer (state={
 export default combineReducers({
   getPostsByCategoryReducer,
   getOnePostReducer,
-  addPostReducer
+  addPostReducer,
+  getAllPostsReducer
 })
