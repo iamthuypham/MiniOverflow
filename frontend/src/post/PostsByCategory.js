@@ -8,11 +8,13 @@ import { fetchPostsByCategory } from './action';
 class PostsByCategory extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      posts: null
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      	const nextCategoryParam = nextProps.match.params.categories
+    	nextProps.dispatchFetchPostsByCategories(nextCategoryParam)
     }
   }
-  
   componentDidMount() {    
     const categoryParam = this.props.match.params.categories
     this.props.dispatchFetchPostsByCategories(categoryParam)
