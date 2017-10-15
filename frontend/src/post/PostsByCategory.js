@@ -4,21 +4,36 @@ import { Route, Link } from 'react-router-dom';
 
 import PostItem from './PostItem';
 import { fetchPostsByCategory } from './action';
+import { fetchAddPost } from './action';
 import PostForm from './PostForm';
 
 class PostsByCategory extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+    	openPostForm: false
+    }
+    this.handlePostForm = this.handlePostForm.bind(this)
+    this.handleSubmitRequest = this.handleSubmitRequest.bind(this)
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.routing.match.params.category !== nextProps.routing.match.params.category) {
       	const nextCategoryNameParam = nextProps.routing.match.params.category
     	nextProps.dispatchFetchPostsByCategories(nextCategoryNameParam)
     }
+    if (this.props.posts !== nextProps.posts) {
+    	this.setState({ openPostForm: false })
+    }
   }
   componentDidMount() {    
     const categoryNameParam = this.props.routing.match.params.category
     this.props.dispatchFetchPostsByCategories(categoryNameParam)
+  }
+  handlePostForm() {
+  	this.setState({openPostForm: !this.state.openPostForm})
+  }
+  handleSubmitRequest(post) {
+  	this.props.dispatchFetchAddPost(post,this.props.posts)
   }
 
   render() {
@@ -27,7 +42,10 @@ class PostsByCategory extends Component {
     console.log(this.props)
     return (
       <div>
-      	<PostForm category={categoryNameParam} categories={categories}/>
+      	<button onClick={this.handlePostForm}>Add Post</button>
+      	{ this.state.openPostForm &&
+      		<PostForm category={categoryNameParam} categories={categories} onSubmitRequest={this.handleSubmitRequest}/>
+      	}
       	{!isFetching && posts.map((post) => 
              <PostItem key={post.id} post={post} categoryOfThisPost={categoryNameParam}/>      
         )}
@@ -36,16 +54,23 @@ class PostsByCategory extends Component {
   }
 }
 
-function mapStateToProps (state) {
-  const { posts, isFetching } = state.PostReducer.getPostsByCategoryReducer
-  return { 
-    posts,
-    isFetching
-         }
+function mapStateToProps (state, ownProps) {
+  console.log(state)
+  const { isFetching } = state.PostReducer.getPostsByCategoryReducer
+  const { isAdded } = state.PostReducer.addPostReducer
+  let posts;
+  
+  if (isAdded) {
+    posts = state.PostReducer.addPostReducer.posts.filter(post => post.category === ownProps.routing.match.params.category)
+  } else {
+  	posts = state.PostReducer.getPostsByCategoryReducer.posts
+  }
+  return { posts, isFetching }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  	dispatchFetchPostsByCategories: (categoryName) => dispatch(fetchPostsByCategory(categoryName))
+  	dispatchFetchPostsByCategories: (categoryName) => dispatch(fetchPostsByCategory(categoryName)),
+  	dispatchFetchAddPost: (post, posts) => dispatch(fetchAddPost(post, posts))
 })
 
 export default connect(
