@@ -9,9 +9,9 @@ This is a project from Udacity React Nanodegree course.
 - Delete posts and comments
 
 ### What 's Included
-- [Starter Code: Udacity/reactnd]("https://github.com/udacity/reactnd-project-readable-starter")
-- [create-react-app]("https://github.com/facebookincubator/create-react-app")
-- [UUID]("https://github.com/kelektiv/node-uuid")
+- [Starter Code: Udacity/reactnd](https://github.com/udacity/reactnd-project-readable-starter)
+- [create-react-app](https://github.com/facebookincubator/create-react-app)
+- [UUID](https://github.com/kelektiv/node-uuid)
 
 ## Get Started
 * Clone this project
