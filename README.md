@@ -1,13 +1,20 @@
-# Readable API Server
+# MiniOverflow App
+This is a project from Udacity React Nanodegree course. 
 
-This is the starter project for the final assessment project for Udacity's Redux course where you will build a content and comment web app. Users will be able to post content to predefined categories, comment on their posts and other users' posts, and vote on posts and comments. Users will also be able to edit and delete posts and comments.
+### Features
+- View contents and comments
+- Post content to predefined categories, comment
+- Vote on posts and comments
+- Edit posts and comments
+- Delete posts and comments
 
-This repository includes the code for the backend API Server that you'll use to develop and interact with the front-end portion of the project.
+### What 's Included
+- [Starter Code: Udacity/reactnd]("https://github.com/udacity/reactnd-project-readable-starter")
+- [create-react-app]("https://github.com/facebookincubator/create-react-app")
+- [UUID]("https://github.com/kelektiv/node-uuid")
 
-## Start Developing
-
-To get started developing right away:
-
+## Get Started
+* Clone this project
 * Install and start the API server
     - `cd api-server`
     - `npm install`
@@ -16,11 +23,3 @@ To get started developing right away:
     - `cd frontend`
     - `npm install`
     - `npm start`
-
-## API Server
-
-Information about the API server and how to use it can be found in its [README file](api-server/README.md).
-
-## Access The API Server
-
-To accesss the backend server in your code, we have stored the URL to the API server in the environment variable `REACT_APP_BACKEND` which you can access in your code using `process.env.REACT_APP_BACKEND`. You can see this in action in `frontend/src/App.js` in `componentDidMount`.
