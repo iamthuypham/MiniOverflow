@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Link } from 'react-router-dom';
 
 import PostItem from './PostItem';
-import { fetchAllPosts, fetchPostsByCategory } from './action';
-import { fetchAddPost } from './action';
 import PostForm from './PostForm';
+import { fetchInitialPosts, fetchAddPost } from './action';
 
 class PostsByCategory extends Component {
   constructor(props) {
@@ -16,40 +14,28 @@ class PostsByCategory extends Component {
     this.handlePostForm = this.handlePostForm.bind(this)
     this.handleSubmitRequest = this.handleSubmitRequest.bind(this)
   }
-  componentWillReceiveProps(nextProps) {
-    if (this.props.routing.match.params.category !== nextProps.routing.match.params.category) {
-      	const nextCategoryNameParam = nextProps.routing.match.params.category
-    	nextProps.dispatchFetchPostsByCategories(nextCategoryNameParam)
-    }
-    if (this.props.posts !== nextProps.posts) {
-    	this.setState({ openPostForm: false })
-    }
-  }
   componentDidMount() {    
-    const categoryNameParam = this.props.routing.match.params.category
-    this.props.dispatchFetchPostsByCategories(categoryNameParam)
-    this.props.dispatchFetchAllPosts()
+    this.props.dispatchFetchInitialPosts()
   }
   handlePostForm() {
   	this.setState({openPostForm: !this.state.openPostForm})
   }
   handleSubmitRequest(post) {
-  	this.props.dispatchFetchAddPost(post,this.props.posts)
+  	this.props.dispatchFetchAddPost(post,this.props.currentPosts)
+    this.setState({ openPostForm: false })
   }
 
   render() {
-    const { isFetching, posts, location, categories, allPosts } = this.props
-    console.log(allPosts)
+    const { postsByCategory } = this.props
     const categoryNameParam = this.props.routing.match.params.category
-    console.log(this.props)
     return (
       <div>
       	<button onClick={this.handlePostForm}>Add Post</button>
       	{ this.state.openPostForm &&
-      		<PostForm category={categoryNameParam} categories={categories} onSubmitRequest={this.handleSubmitRequest}/>
+      		<PostForm category={categoryNameParam} onSubmitRequest={this.handleSubmitRequest}/>
       	}
-      	{!isFetching && posts.map((post) => 
-             <PostItem key={post.id} post={post} categoryOfThisPost={categoryNameParam}/>      
+      	{postsByCategory.map((post) => 
+             post.id && <PostItem key={post.id} post={post} categoryOfThisPost={categoryNameParam}/>      
         )}
       </div>
     )
@@ -57,25 +43,20 @@ class PostsByCategory extends Component {
 }
 
 function mapStateToProps (state, ownProps) {
-  console.log(state)
-  console.log(ownProps)
-  const { isFetching } = state.PostReducer.getPostsByCategoryReducer
-  const { isAdded } = state.PostReducer.addPostReducer
-  const allPosts = state.PostReducer.getAllPostsReducer.posts
-  let posts;
-  if (ownProps.routing.match.path === '/'){
-  	posts = allPosts
-  } else if (isAdded) {
-    posts = state.PostReducer.addPostReducer.posts.filter(post => post.category === ownProps.routing.match.params.category)
+  let postsByCategory
+  const currentCategory = ownProps.routing.match.params.category
+  const initialPostsByCategory = state.PostReducer.InitialPostsReducer.posts
+  const currentPosts = state.PostReducer.CurrentPostsReducer.posts
+  if (currentPosts.length) {
+    postsByCategory = currentPosts.filter((post) => post.category === currentCategory)
   } else {
-  	posts = state.PostReducer.getPostsByCategoryReducer.posts
+  	postsByCategory = initialPostsByCategory.filter((post) => post.category === currentCategory)
   }
-  return { posts, isFetching }
+  return {postsByCategory, currentPosts}
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  	dispatchFetchAllPosts: () => dispatch(fetchAllPosts()),
-  	dispatchFetchPostsByCategories: (categoryName) => dispatch(fetchPostsByCategory(categoryName)),
+  	dispatchFetchInitialPosts: () => dispatch(fetchInitialPosts()),
   	dispatchFetchAddPost: (post, posts) => dispatch(fetchAddPost(post, posts))
 })
 
@@ -83,3 +64,6 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(PostsByCategory);
+
+
+  

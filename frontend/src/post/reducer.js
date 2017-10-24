@@ -1,19 +1,18 @@
 import { combineReducers } from 'redux'
 
 import {
-  GET_ALL_POSTS,
-  GET_POSTS_BY_CATEGORY,
+  GET_INIT_POSTS,
   GET_ONE_POST,
   ADD_POST,
 } from './action'
 
-function getPostsByCategoryReducer (state={
+function InitialPostsReducer (state={
     isFetching: true,
     posts: []
   }, action) {
   const { posts } = action
   switch (action.type) {
-    case GET_POSTS_BY_CATEGORY:
+    case GET_INIT_POSTS:
       return Object.assign({}, state, {
         isFetching: false,
         posts
@@ -22,17 +21,19 @@ function getPostsByCategoryReducer (state={
       return state
   }
 }
-function getAllPostsReducer (state={
-    isFetching: true,
+function CurrentPostsReducer (state={
     posts: []
   }, action) {
-  const { posts } = action
-  console.log(posts)
+  const { post, posts } = action
   switch (action.type) {
-    case GET_ALL_POSTS:
+    case ADD_POST:
       return Object.assign({}, state, {
-        isFetching: false,
-        posts
+        posts:[
+          ...posts, 
+          post: {
+          ...state,
+          },          
+        ]
       })
     default:
       return state
@@ -53,34 +54,9 @@ function getOnePostReducer (state={
       return state
   }
 }
-function addPostReducer (state={
-    isAdded: false,
-    posts: []
-  }, action) {
-  const { response, post, posts } = action
-  if (post) {
-    post.deleted = response.deleted
-    post.voteScore = response.voteScore
-  }
-  switch (action.type) {
-    case ADD_POST:
-      return Object.assign({}, state, {
-        isAdded: true,
-        posts:[
-          ...posts, 
-          post: {
-          ...state,
-          },          
-        ]
-      })
-    default:
-      return state
-  }
-}
 
 export default combineReducers({
-  getPostsByCategoryReducer,
   getOnePostReducer,
-  addPostReducer,
-  getAllPostsReducer
+  InitialPostsReducer,
+  CurrentPostsReducer
 })

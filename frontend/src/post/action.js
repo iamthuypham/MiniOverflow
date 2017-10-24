@@ -1,15 +1,9 @@
-export const GET_ALL_POSTS = 'GET_ALL_POSTS'
-export const GET_POSTS_BY_CATEGORY = 'GET_POSTS_BY_CATEGORY'
+export const GET_INIT_POSTS = 'GET_INITL_POSTS'
 export const GET_ONE_POST = 'GET_ONE_POST'
 export const ADD_POST = 'ADD_POST'
 
-const getAllPosts = (posts) => ({
-        type: GET_ALL_POSTS,
-      	posts
-  }
-)
-const getPostsByCategory = posts => ({
-        type: GET_POSTS_BY_CATEGORY,
+const getInitialPosts = (posts) => ({
+        type: GET_INIT_POSTS,
       	posts
   }
 )
@@ -21,24 +15,16 @@ const getOnePost = post => ({
 const addPost = (response, post, posts) => ({
         type: ADD_POST,
   		post,
-  		posts,
-      	response
+  		posts,      	
+  		response
   }
 )
-export function fetchAllPosts() {
+export function fetchInitialPosts() {
   return function (dispatch) {
     const url = `${process.env.REACT_APP_BACKEND}/posts`
     return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include' })
     	.then((res) => res.json())
-      .then(data => dispatch(getAllPosts(data)))
-  };
-}
-export function fetchPostsByCategory(categoryId) {
-  return function (dispatch) {
-    const url = `${process.env.REACT_APP_BACKEND}/${categoryId}/posts`
-    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include' })
-    	.then((res) => res.json())
-      .then(data => dispatch(getPostsByCategory(data)))
+      .then(data => dispatch(getInitialPosts(data)))
   };
 }
 

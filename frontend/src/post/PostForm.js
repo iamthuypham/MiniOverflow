@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import { fetchCategories } from '../category/action';
+
 const uuidv4 = require('uuid/v4');
 
 class PostForm extends Component {
@@ -38,6 +40,9 @@ class PostForm extends Component {
         })
     }
   }
+  componentDidMount() {    
+    this.props.dispatchFetchCategories()
+  }
   render() {
     const { categories } = this.props.categories
     const { title, author, body, category } = this.state
@@ -63,8 +68,16 @@ class PostForm extends Component {
   }
 }
 
-PostForm.PropTypes = { 
-	categories: PropTypes.array.isRequired
+function mapStateToProps (state, ownProps) {
+  const { categories } = state.CategoryReducer.getAllCategories
+  return { categories }
 }
 
-export default PostForm;
+const mapDispatchToProps = (dispatch) => ({
+  	dispatchFetchCategories: () => dispatch(fetchCategories()),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PostForm);

@@ -4,6 +4,7 @@ import { Route, Link } from 'react-router-dom';
 
 import Category from './category/Category';
 import PostsByCategory from './post/PostsByCategory';
+import AllPosts from './post/AllPosts';
 import PostWithComments from './post/PostWithComments';
 import { fetchCategories } from './category/action';
 
@@ -29,9 +30,8 @@ class App extends Component {
     	  )}
         </header>
 		<main>
-			<Route exact path='/' render={(props)=><PostsByCategory categories={categories} routing={props}/>}/>
-			<Route exact path='/:category' render={(props)=><PostsByCategory categories={categories} routing={props}/>}/>
-			<Route exact path='/:category/:post_id' component={PostWithComments}/>
+			<Route exact path='/' render={(props)=><AllPosts routing={props}/>}/>
+			<Route exact path='/:category' render={(props)=><PostsByCategory routing={props}/>}/>
 		</main>
       </div>
     )
@@ -54,3 +54,6 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(App);
+
+//<Route exact path='/:category' render={(props)=><PostsByCategory categories={categories} routing={props}/>}/>
+ //			<Route exact path='/:category/:post_id' component={PostWithComments}/>
