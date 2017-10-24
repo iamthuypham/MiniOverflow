@@ -21,7 +21,7 @@ class PostsByCategory extends Component {
   	this.setState({openPostForm: !this.state.openPostForm})
   }
   handleSubmitRequest(post) {
-  	this.props.dispatchFetchAddPost(post,this.props.currentPosts)
+  	this.props.dispatchFetchAddPost(post,this.props.allPosts)
     this.setState({ openPostForm: false })
   }
 
@@ -44,15 +44,18 @@ class PostsByCategory extends Component {
 
 function mapStateToProps (state, ownProps) {
   let postsByCategory
+  let allPosts
   const currentCategory = ownProps.routing.match.params.category
   const initialPostsByCategory = state.PostReducer.InitialPostsReducer.posts
   const currentPosts = state.PostReducer.CurrentPostsReducer.posts
   if (currentPosts.length) {
     postsByCategory = currentPosts.filter((post) => post.category === currentCategory)
+    allPosts = currentPosts
   } else {
   	postsByCategory = initialPostsByCategory.filter((post) => post.category === currentCategory)
+    allPosts = initialPostsByCategory
   }
-  return {postsByCategory, currentPosts}
+  return {postsByCategory, allPosts}
 }
 
 const mapDispatchToProps = (dispatch) => ({

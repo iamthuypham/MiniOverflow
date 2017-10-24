@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 import { fetchCategories } from '../category/action';
 
@@ -14,7 +12,7 @@ class PostForm extends Component {
       	title: '',
       	body: '',
       	author: '',
-      	category: this.props.currentCategory
+      	category: this.props.category
     })
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -52,7 +50,7 @@ class PostForm extends Component {
                <input type="text" name="title" placeholder="New Title" value={title} onChange={(e) => this.setState({ title: e.target.value })} required/>
 			   <label>
                   Current category:
-                  <select value={this.state.category} onChange={(e) => this.setState({ category: e.target.value })}>
+                  <select value={category} onChange={(e) => this.setState({ category: e.target.value })}>
 					<option value=''>Select a category</option>
 					{categories && categories.map((category) => 
                     	<option key={category.name} value={`${category.name}`}>{category.name}</option>
