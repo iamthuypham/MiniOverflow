@@ -24,14 +24,18 @@ function InitialPostsReducer (state={
 function CurrentPostsReducer (state={
     posts: []
   }, action) {
-  const { post, posts } = action
+  const { response, post, posts } = action
+  if (post) {
+    post.voteScore = response.voteScore
+    post.deleted = response.deleted
+  }
   switch (action.type) {
     case ADD_POST:
       return Object.assign({}, state, {
         posts:[
           ...posts, 
           post: {
-          ...state,
+            ...state
           },          
         ]
       })

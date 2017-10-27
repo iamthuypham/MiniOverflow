@@ -31,6 +31,7 @@ class PostWithComments extends Component {
 }
 
 function mapStateToProps (state) {
+  console.log(state)
   const { post, isFetching } = state.PostReducer.getOnePostReducer
   const { comments } = state.CommentReducer.getThisPostComments
   return { 
