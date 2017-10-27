@@ -35,7 +35,7 @@ class AllPosts extends Component {
       		<PostForm category={categoryNameParam} onSubmitRequest={this.handleSubmitRequest}/>
       	}
       	{posts.map((post) => 
-             post.id && <PostItem key={post.id} post={post} categoryOfThisPost={categoryNameParam}/>      
+             post.id && <PostItem key={post.id} post={post} categoryOfThisPost={post.category}/>      
         )}
       </div>
     )

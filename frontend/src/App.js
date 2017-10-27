@@ -32,6 +32,7 @@ class App extends Component {
 		<main>
 			<Route exact path='/' render={(props)=><AllPosts routing={props}/>}/>
 			<Route exact path='/:category' render={(props)=><PostsByCategory routing={props}/>}/>
+ 			<Route exact path='/:category/:post_id' component={PostWithComments}/>
 		</main>
       </div>
     )
@@ -55,5 +56,3 @@ export default connect(
   mapDispatchToProps
 )(App);
 
-//<Route exact path='/:category' render={(props)=><PostsByCategory categories={categories} routing={props}/>}/>
- //			<Route exact path='/:category/:post_id' component={PostWithComments}/>
