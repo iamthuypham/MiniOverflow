@@ -12,11 +12,10 @@ const getOnePost = post => ({
       	post
   }
 )
-const addPost = (response, post, posts) => ({
+const addPost = (post, posts) => ({
         type: ADD_POST,
   		post,
   		posts,      	
-  		response
   }
 )
 export function fetchInitialPosts() {
@@ -25,6 +24,7 @@ export function fetchInitialPosts() {
     return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include' })
     	.then((res) => res.json())
       .then(data => dispatch(getInitialPosts(data)))
+    .catch(function(error) { console.log("error: "+ error); })
   };
 }
 
@@ -34,14 +34,21 @@ export function fetchOnePost(postId) {
     return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include' })
     	.then((res) => res.json())
       .then(data => dispatch(getOnePost(data)))
+    .catch(function(error) { console.log("error: "+ error); })
   };
 }
 
 export function fetchAddPost(post, posts) {
   return function (dispatch) {
     const url = `${process.env.REACT_APP_BACKEND}/posts`
-    return fetch( url, { method: 'post', body: JSON.stringify(post), headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include' })
-    	.then(res => res.json())
-      .then(data => dispatch(addPost(data, post, posts)))
+
+    const request = new Request(url, {
+      method: 'post',
+      body: JSON.stringify(post),
+      headers: { 'Authorization': 'whatever-you-want', "Content-Type": "application/json", },
+      credentials: 'include' 
+    });
+
+    return fetch(request).then(res => res.json()).then(data => dispatch(addPost(data, posts)))
   };
 }

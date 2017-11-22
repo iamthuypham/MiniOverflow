@@ -21,6 +21,7 @@ class AllPosts extends Component {
   	this.setState({openPostForm: !this.state.openPostForm})
   }
   handleSubmitRequest(post) {
+    console.log(post)
   	this.props.dispatchFetchAddPost(post,this.props.posts)
     this.setState({ openPostForm: false })
   }
@@ -43,7 +44,6 @@ class AllPosts extends Component {
 }
 
 function mapStateToProps (state, ownProps) {
-  console.log(state)
   let posts
   const initialPosts = state.PostReducer.InitialPostsReducer.posts
   const currentPosts = state.PostReducer.CurrentPostsReducer.posts

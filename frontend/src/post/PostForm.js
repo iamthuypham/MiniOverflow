@@ -25,6 +25,8 @@ class PostForm extends Component {
       	body: this.state.body,
       	author: this.state.author,
       	timestamp: Date.now(),
+      voteScore: 1,
+      deleted: false
     }
     this.props.onSubmitRequest(newPost)
   }
