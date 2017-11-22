@@ -21,6 +21,7 @@ class AllPosts extends Component {
   	this.setState({openPostForm: !this.state.openPostForm})
   }
   handleSubmitRequest(post) {
+    console.log(post)
   	this.props.dispatchFetchAddPost(post,this.props.posts)
     this.setState({ openPostForm: false })
   }

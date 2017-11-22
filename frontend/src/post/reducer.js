@@ -24,15 +24,13 @@ function InitialPostsReducer (state={
 function CurrentPostsReducer (state={
     posts: []
   }, action) {
-  const { post, posts } = action
+  const { post, posts } = action  
   switch (action.type) {
     case ADD_POST:
       return Object.assign({}, state, {
         posts:[
           ...posts, 
-          post: {
-          ...state,
-          },          
+          post
         ]
       })
     default:
@@ -44,6 +42,7 @@ function getOnePostReducer (state={
     post: []
   }, action) {
   const { post } = action
+  console.log(post)
   switch (action.type) {
     case GET_ONE_POST:
       return Object.assign({}, state, {

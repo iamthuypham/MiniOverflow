@@ -12,8 +12,9 @@ class PostWithComments extends Component {
   }
   componentDidMount() {    
     const postIdParam = this.props.match.params.post_id
+    console.log(this.props)
     this.props.dispatchFetchOnePost(postIdParam)
-    this.props.dispatchFetchThisPostComments(postIdParam)
+    //this.props.dispatchFetchThisPostComments(postIdParam)
   }
 
   render() {
@@ -22,27 +23,21 @@ class PostWithComments extends Component {
     return (
       <div>
       	<div>{post.author} - {post.title} - {post.body} - {post.voteScore}</div>
-      	{!isFetching && comments.map((comment) => 
-      		 <Comment key={comment.id} comment={comment}/>      
-    	  )}
+      	
       </div>
     )
   }
 }
 
 function mapStateToProps (state) {
+  console.log(state)
   const { post, isFetching } = state.PostReducer.getOnePostReducer
-  const { comments } = state.CommentReducer.getThisPostComments
-  return { 
-    post,
-    isFetching,
-    comments
-         }
+  return {post, isFetching}
 }
 
 const mapDispatchToProps = (dispatch) => ({
   	dispatchFetchOnePost: (postId) => dispatch(fetchOnePost(postId)),
-  	dispatchFetchThisPostComments: (postId) => dispatch(fetchThisPostComments(postId))
+  	
 })
 
 export default connect(
