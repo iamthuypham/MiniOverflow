@@ -45,8 +45,8 @@ export function fetchAddPost(post, posts) {
     const request = new Request(url, {
       method: 'post',
       body: JSON.stringify(post),
-      headers: { 'Authorization': 'whatever-you-want', "Content-Type": "application/json", },
-      credentials: 'include' 
+      headers: { 'Authorization': 'whatever-you-want', "Content-Type": "application/json",
+      credentials: 'include'}
     });
 
     return fetch(request).then(res => res.json()).then(data => dispatch(addPost(data, posts)))

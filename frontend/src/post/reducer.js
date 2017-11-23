@@ -42,7 +42,6 @@ function getOnePostReducer (state={
     post: []
   }, action) {
   const { post } = action
-  console.log(post)
   switch (action.type) {
     case GET_ONE_POST:
       return Object.assign({}, state, {

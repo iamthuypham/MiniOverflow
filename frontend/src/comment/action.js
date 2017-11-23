@@ -1,10 +1,29 @@
 export const GET_THIS_POST_COMMENTS = 'GET_THIS_POST_COMMENTS'
+export const ADD_COMMENT = 'ADD_COMMENT'
+export const RESET_CURRENT_COMMENT_AFTER_CHANGE_PATH = 'RESET_CURRENT_COMMENT_AFTER_CHANGE_PATH'
+
+const reset = () => ({
+        type: RESET_CURRENT_COMMENT_AFTER_CHANGE_PATH
+  }
+)
 
 const getThisPostComments = comments => ({
         type: GET_THIS_POST_COMMENTS,
       	comments
   }
 )
+
+const addComment = (comment, comments) => ({
+        type: ADD_COMMENT,
+      	comment,
+      	comments
+  }
+)
+export function resetComments() {
+  return function (dispatch) {
+    dispatch(reset())
+  }
+}
 
 export function fetchThisPostComments(postId) {
   return function (dispatch) {
@@ -14,4 +33,19 @@ export function fetchThisPostComments(postId) {
       .then(data => dispatch(getThisPostComments(data))
     );
   };
+}
+
+export function fetchAddComment(comment, comments) {
+  return function (dispatch) {
+    const url = `${process.env.REACT_APP_BACKEND}/comments`
+  
+    const request = new Request(url, {
+      method: 'post',
+      body: JSON.stringify(comment),
+      headers: { 'Authorization': 'whatever-you-want', "Content-Type": "application/json",
+      credentials: 'include'},
+    });
+
+    return fetch(request).then(res => res.json()).then(data => dispatch(addComment(data, comments)))
+  }
 }
