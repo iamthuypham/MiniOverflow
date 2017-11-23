@@ -22,12 +22,12 @@ class AllPosts extends Component {
   	this.setState({openPostForm: !this.state.openPostForm})
   }
   handleSubmitRequest(post) {
-  	this.props.dispatchFetchAddPost(post,this.props.posts)
+  	this.props.dispatchFetchAddPost(post,this.props.currentPosts)
     this.setState({ openPostForm: false })
   }
 
   render() {
-    const { posts } = this.props
+    const { currentPosts } = this.props
     const categoryNameParam = this.props.routing.match.params.category
     return (
       <div>
@@ -35,7 +35,7 @@ class AllPosts extends Component {
       	{ this.state.openPostForm &&
       		<PostForm category={categoryNameParam} onSubmitRequest={this.handleSubmitRequest}/>
       	}
-      	{posts.map((post) => 
+      	{currentPosts.map((post) => 
              post.id && !post.deleted && <PostItem key={post.id} post={post} categoryOfThisPost={post.category}/>      
         )}
       </div>
@@ -44,15 +44,17 @@ class AllPosts extends Component {
 }
 
 function mapStateToProps (state, ownProps) {
-  let posts
+  let currentPosts
   const initialPosts = state.PostReducer.InitialPostsReducer.posts
-  const currentPosts = state.PostReducer.CurrentPostsReducer.posts
-  if (currentPosts.length) {
-    posts = currentPosts
+  const { posts, isInitial } = state.PostReducer.CurrentPostsReducer
+  console.log("at All Posts")
+  console.log(isInitial)
+  if (isInitial) {
+    currentPosts = initialPosts
   } else {
-  	posts = initialPosts
+  	currentPosts = posts
   }
-  return {posts}
+  return { currentPosts}
 }
 
 const mapDispatchToProps = (dispatch) => ({

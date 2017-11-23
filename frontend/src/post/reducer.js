@@ -9,64 +9,67 @@ import {
 } from './action'
 
 function InitialPostsReducer (state={
-    isFetching: true,
-    posts: []
+    posts: [],
+    isInitial: true
   }, action) {
   const { posts } = action
   switch (action.type) {
     case GET_INIT_POSTS:
       return Object.assign({}, state, {
-        isFetching: false,
-        posts
+        posts,
+        isInitial: true
       })
     default:
       return state
   }
 }
 function CurrentPostsReducer (state={
-    posts: []
+    posts: [],
+    isInitial: true
   }, action) {
   const { post, posts } = action  
   switch (action.type) {
     case RESET_POSTS_AFTER_CHANGE_PATH:
       return Object.assign({}, {
-        posts: []
+        posts: [],
+        isInitial: true,
       })
     case ADD_POST:
       return Object.assign({}, state, {
         posts:[
           ...posts, 
           post
-        ]
+        ],
+        isInitial: false
       })
     case DELETE_POST:
       let index = posts.findIndex(anyPost => anyPost.id==post.id)
-      console.log(index)
-      console.log(posts)
       return Object.assign({}, state, {
         posts: [
           ...posts.slice(0,index),
           ...posts.slice(index+1)
-        ]
+        ],
+        isInitial: false
       })
     default:
       return state
   }
 }
 function getOnePostReducer (state={
-    isFetching: true,
+    isInitial: true,
     post: []
   }, action) {
   const { post } = action
   switch (action.type) {
     case GET_ONE_POST:
       return Object.assign({}, state, {
-        isFetching: false,
+        isInitial: false,
         post
       })
     case RESET_POSTS_AFTER_CHANGE_PATH:
       return Object.assign({}, state, {
-        post: []
+        post: [],
+        isInitial: true,
       })
     default:
       return state

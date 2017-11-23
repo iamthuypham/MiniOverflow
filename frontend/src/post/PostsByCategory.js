@@ -58,26 +58,22 @@ class PostsByCategory extends Component {
 
 function mapStateToProps (state, ownProps) {
   let postsByCategory
-  let allPosts
   const currentCategory = ownProps.routing.match.params.category
   const initialPostsByCategory = state.PostReducer.InitialPostsReducer.posts
-  const currentPosts = state.PostReducer.CurrentPostsReducer.posts
-  
-  if (currentPosts.length) {
-    postsByCategory = currentPosts.filter((post) => post.category === currentCategory && post.deleted == false)
-    allPosts = currentPosts
+  const { posts, isInitial } = state.PostReducer.CurrentPostsReducer
+  if (isInitial) {
+    postsByCategory = initialPostsByCategory.filter((post) => post.category === currentCategory && !post.deleted)
   } else {
-  	postsByCategory = initialPostsByCategory.filter((post) => post.category === currentCategory)
-    allPosts = initialPostsByCategory
+  	postsByCategory = posts.filter((post) => post.category === currentCategory && !post.deleted)
   }
-  return {postsByCategory, allPosts}
+  return {postsByCategory}
 }
 
 const mapDispatchToProps = (dispatch) => ({
   	dispatchFetchInitialPosts: () => dispatch(fetchInitialPosts()),
   	dispatchFetchAddPost: (post, posts) => dispatch(fetchAddPost(post, posts)),
   	dispatchResetPosts: () => dispatch(resetPosts()),
-  	dispatchFetchDeletePost: (postId, posts) => dispatch(fetchDeletePost(postId, posts))
+  	dispatchFetchDeletePost: (post, posts) => dispatch(fetchDeletePost(post, posts))
 })
 
 export default connect(

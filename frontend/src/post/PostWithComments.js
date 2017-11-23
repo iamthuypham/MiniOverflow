@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Route, Link } from 'react-router-dom';
 
 import { fetchOnePost } from './action';
-import { fetchThisPostComments, fetchAddComment, resetComments } from '../comment/action';
+import { fetchThisPostComments, fetchAddComment, resetComments, fetchDeleteComment } from '../comment/action';
 import Comment from '../comment/Comment';
 import CommentForm from '../comment/CommentForm';
 
@@ -21,6 +21,10 @@ class PostWithComments extends Component {
   handleSubmitRequest(comment) {
   	this.props.dispatchFetchAddComment(comment,this.props.commentsByPost)
   }
+  handleDelete(comment, e) {
+    e.preventDefault()
+    this.props.dispatchFetchDeleteComment(comment, this.props.commentsByPost)
+  }
 
   render() {
     const { post, commentsByPost } = this.props
@@ -30,7 +34,15 @@ class PostWithComments extends Component {
       	<div>{post.author} - {post.title} - {post.body} - {post.voteScore}</div>
       	<div>Comments</div>
       	{commentsByPost && commentsByPost.map((comment) => 
-          comment.id && <Comment key={comment.id} comment={comment}/>      
+          comment.id &&
+          <div key={comment.id}>
+            <Comment comment={comment}/>   
+            <input
+                type='button'
+                value='Delete'
+                onClick={(e) => this.handleDelete(comment, e)}
+              />
+          </div>
         )}
         <div>Add a comment</div>
          <CommentForm post={post} comments={commentsByPost} onSubmitRequest={this.handleSubmitRequest}/>
@@ -43,13 +55,13 @@ function mapStateToProps (state, ownProps) {
   const currentPostId = ownProps.routing.match.params.post_id
   let commentsByPost
   const { post } = state.PostReducer.getOnePostReducer
-  const { comments } = state.CommentReducer.getThisPostComments
-  const currentComments = state.CommentReducer.CurrentCommentsReducer.comments
+  const initialComments = state.CommentReducer.getThisPostComments.comments
+  const { comments, isInitial } = state.CommentReducer.CurrentCommentsReducer
   
-  if (currentComments.length) {
-    commentsByPost = currentComments.filter((comment) => comment.parentId === currentPostId)
+  if (isInitial) {
+    commentsByPost = initialComments.filter((comment) => comment.parentId === currentPostId && !comment.deleted)
   } else {
-  	commentsByPost = comments.filter((comment) => comment.parentId === currentPostId)
+  	commentsByPost = comments.filter((comment) => comment.parentId === currentPostId && !comment.deleted)
   }
   return {post, commentsByPost}
 }
@@ -59,6 +71,7 @@ const mapDispatchToProps = (dispatch) => ({
   	dispatchResetComments: () => dispatch(resetComments()),
   	dispatchFetchThisPostComments: (postId) => dispatch(fetchThisPostComments(postId)),
   	dispatchFetchAddComment: (comment, comments) => dispatch(fetchAddComment(comment, comments)),
+  	dispatchFetchDeleteComment: (comment, comments) => dispatch(fetchDeleteComment(comment, comments))
 })
 
 export default connect(

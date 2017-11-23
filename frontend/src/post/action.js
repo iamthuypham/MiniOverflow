@@ -43,7 +43,7 @@ export function resetPosts() {
 export function fetchInitialPosts() {
   return function (dispatch) {
     const url = `${process.env.REACT_APP_BACKEND}/posts`
-    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include' })
+    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include'  })
     	.then((res) => res.json())
       .then(data => dispatch(getInitialPosts(data)))
     .catch(function(error) { console.log("error: "+ error); })
@@ -67,7 +67,7 @@ export function fetchAddPost(post, posts) {
     const request = new Request(url, {
       method: 'post',
       body: JSON.stringify(post),
-      headers: { 'Authorization': 'whatever-you-want', "Content-Type": "application/json",}
+      headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include'
     });
 
     return fetch(request).then(res => res.json()).then(data => dispatch(addPost(data, posts)))
@@ -81,7 +81,7 @@ export function fetchDeletePost(post,posts) {
 
     const request = new Request(url, {
       method: 'delete',
-      headers: { 'Authorization': 'whatever-you-want', "Content-Type": "application/json",}
+      headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include' 
     });
 
     return fetch(request)
