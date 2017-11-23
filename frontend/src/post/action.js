@@ -1,4 +1,5 @@
 export const GET_INIT_POSTS = 'GET_INITL_POSTS'
+export const RESET_POSTS_AFTER_CHANGE_PATH = 'RESET_POSTS_AFTER_CHANGE_PATH'
 export const GET_ONE_POST = 'GET_ONE_POST'
 export const ADD_POST = 'ADD_POST'
 
@@ -7,6 +8,12 @@ const getInitialPosts = (posts) => ({
       	posts
   }
 )
+
+const reset = () => ({
+        type: RESET_POSTS_AFTER_CHANGE_PATH,
+  }
+)
+
 const getOnePost = post => ({
         type: GET_ONE_POST,
       	post
@@ -18,10 +25,16 @@ const addPost = (post, posts) => ({
   		posts,      	
   }
 )
+export function resetPosts() {
+  return function (dispatch) {
+    dispatch(reset())
+  };
+}
+
 export function fetchInitialPosts() {
   return function (dispatch) {
     const url = `${process.env.REACT_APP_BACKEND}/posts`
-    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include' })
+    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' } })
     	.then((res) => res.json())
       .then(data => dispatch(getInitialPosts(data)))
     .catch(function(error) { console.log("error: "+ error); })
@@ -31,7 +44,7 @@ export function fetchInitialPosts() {
 export function fetchOnePost(postId) {
   return function (dispatch) {
     const url = `${process.env.REACT_APP_BACKEND}/posts/${postId}`
-    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include' })
+    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' } })
     	.then((res) => res.json())
       .then(data => dispatch(getOnePost(data)))
     .catch(function(error) { console.log("error: "+ error); })
@@ -45,8 +58,7 @@ export function fetchAddPost(post, posts) {
     const request = new Request(url, {
       method: 'post',
       body: JSON.stringify(post),
-      headers: { 'Authorization': 'whatever-you-want', "Content-Type": "application/json",
-      credentials: 'include'}
+      headers: { 'Authorization': 'whatever-you-want', "Content-Type": "application/json",}
     });
 
     return fetch(request).then(res => res.json()).then(data => dispatch(addPost(data, posts)))

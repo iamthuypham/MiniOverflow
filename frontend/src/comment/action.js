@@ -28,7 +28,7 @@ export function resetComments() {
 export function fetchThisPostComments(postId) {
   return function (dispatch) {
     const url = `${process.env.REACT_APP_BACKEND}/posts/${postId}/comments`
-    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include' })
+    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }})
     	.then((res) => res.json())
       .then(data => dispatch(getThisPostComments(data))
     );
@@ -42,8 +42,7 @@ export function fetchAddComment(comment, comments) {
     const request = new Request(url, {
       method: 'post',
       body: JSON.stringify(comment),
-      headers: { 'Authorization': 'whatever-you-want', "Content-Type": "application/json",
-      credentials: 'include'},
+      headers: { 'Authorization': 'whatever-you-want', "Content-Type": "application/json",},
     });
 
     return fetch(request).then(res => res.json()).then(data => dispatch(addComment(data, comments)))

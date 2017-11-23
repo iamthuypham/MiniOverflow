@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import PostItem from './PostItem';
 import PostForm from './PostForm';
-import { fetchInitialPosts, fetchAddPost } from './action';
+import { fetchInitialPosts, fetchAddPost, resetPosts } from './action';
 
 class PostsByCategory extends Component {
   constructor(props) {
@@ -14,7 +14,8 @@ class PostsByCategory extends Component {
     this.handlePostForm = this.handlePostForm.bind(this)
     this.handleSubmitRequest = this.handleSubmitRequest.bind(this)
   }
-  componentDidMount() {    
+  componentDidMount() {
+    this.props.dispatchResetPosts()
     this.props.dispatchFetchInitialPosts()
   }
   handlePostForm() {
@@ -48,6 +49,7 @@ function mapStateToProps (state, ownProps) {
   const currentCategory = ownProps.routing.match.params.category
   const initialPostsByCategory = state.PostReducer.InitialPostsReducer.posts
   const currentPosts = state.PostReducer.CurrentPostsReducer.posts
+  console.log(state)
   if (currentPosts.length) {
     postsByCategory = currentPosts.filter((post) => post.category === currentCategory)
     allPosts = currentPosts
@@ -60,7 +62,8 @@ function mapStateToProps (state, ownProps) {
 
 const mapDispatchToProps = (dispatch) => ({
   	dispatchFetchInitialPosts: () => dispatch(fetchInitialPosts()),
-  	dispatchFetchAddPost: (post, posts) => dispatch(fetchAddPost(post, posts))
+  	dispatchFetchAddPost: (post, posts) => dispatch(fetchAddPost(post, posts)),
+  	dispatchResetPosts: () => dispatch(resetPosts())
 })
 
 export default connect(

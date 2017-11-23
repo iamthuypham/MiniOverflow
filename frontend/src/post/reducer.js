@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 
 import {
   GET_INIT_POSTS,
+  RESET_POSTS_AFTER_CHANGE_PATH,
   GET_ONE_POST,
   ADD_POST,
 } from './action'
@@ -47,6 +48,10 @@ function getOnePostReducer (state={
       return Object.assign({}, state, {
         isFetching: false,
         post
+      })
+    case RESET_POSTS_AFTER_CHANGE_PATH:
+      return Object.assign({}, state, {
+        post: []
       })
     default:
       return state
