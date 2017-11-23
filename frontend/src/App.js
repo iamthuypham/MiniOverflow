@@ -31,7 +31,7 @@ class App extends Component {
         </header>
 		<main>
 			<Route exact path='/' render={(props)=><AllPosts routing={props}/>}/>
-			<Route exact path='/:category' render={(props)=><PostsByCategory routing={props}/>}/>
+			<Route exact path='/:category' render={(props)=><PostsByCategory routing={props} key={props.match.params.category}/>}/>
  			<Route exact path='/:category/:post_id' render={(props)=><PostWithComments routing={props}/>}/>
 		</main>
       </div>

@@ -28,7 +28,7 @@ export function resetComments() {
 export function fetchThisPostComments(postId) {
   return function (dispatch) {
     const url = `${process.env.REACT_APP_BACKEND}/posts/${postId}/comments`
-    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }})
+    return fetch( url, { headers: { 'Authorization': 'whatever-you-want' }, credentials: 'include'})
     	.then((res) => res.json())
       .then(data => dispatch(getThisPostComments(data))
     );

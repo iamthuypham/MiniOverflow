@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import PostItem from './PostItem';
 import PostForm from './PostForm';
-import { fetchInitialPosts, fetchAddPost, resetPosts } from './action';
+import { fetchInitialPosts, fetchAddPost, resetPosts, fetchDeletePost } from './action';
 
 class PostsByCategory extends Component {
   constructor(props) {
@@ -13,6 +13,7 @@ class PostsByCategory extends Component {
     }
     this.handlePostForm = this.handlePostForm.bind(this)
     this.handleSubmitRequest = this.handleSubmitRequest.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
   componentDidMount() {
     this.props.dispatchResetPosts()
@@ -22,8 +23,12 @@ class PostsByCategory extends Component {
   	this.setState({openPostForm: !this.state.openPostForm})
   }
   handleSubmitRequest(post) {
-  	this.props.dispatchFetchAddPost(post,this.props.allPosts)
+  	this.props.dispatchFetchAddPost(post,this.props.postsByCategory)
     this.setState({ openPostForm: false })
+  }
+  handleDelete(post, e) {
+    e.preventDefault()
+    this.props.dispatchFetchDeletePost(post, this.props.postsByCategory)
   }
 
   render() {
@@ -36,7 +41,15 @@ class PostsByCategory extends Component {
       		<PostForm category={categoryNameParam} onSubmitRequest={this.handleSubmitRequest}/>
       	}
       	{postsByCategory.map((post) => 
-             post.id && <PostItem key={post.id} post={post} categoryOfThisPost={post.category}/>      
+          !post.deleted &&
+          <div key={post.id}>
+            <PostItem post={post} categoryOfThisPost={post.category}/>
+            <input
+              type='button'
+              value='Delete'
+              onClick={(e) => this.handleDelete(post, e)}
+            />
+          </div>
         )}
       </div>
     )
@@ -49,9 +62,9 @@ function mapStateToProps (state, ownProps) {
   const currentCategory = ownProps.routing.match.params.category
   const initialPostsByCategory = state.PostReducer.InitialPostsReducer.posts
   const currentPosts = state.PostReducer.CurrentPostsReducer.posts
-  console.log(state)
+  
   if (currentPosts.length) {
-    postsByCategory = currentPosts.filter((post) => post.category === currentCategory)
+    postsByCategory = currentPosts.filter((post) => post.category === currentCategory && post.deleted == false)
     allPosts = currentPosts
   } else {
   	postsByCategory = initialPostsByCategory.filter((post) => post.category === currentCategory)
@@ -63,7 +76,8 @@ function mapStateToProps (state, ownProps) {
 const mapDispatchToProps = (dispatch) => ({
   	dispatchFetchInitialPosts: () => dispatch(fetchInitialPosts()),
   	dispatchFetchAddPost: (post, posts) => dispatch(fetchAddPost(post, posts)),
-  	dispatchResetPosts: () => dispatch(resetPosts())
+  	dispatchResetPosts: () => dispatch(resetPosts()),
+  	dispatchFetchDeletePost: (postId, posts) => dispatch(fetchDeletePost(postId, posts))
 })
 
 export default connect(

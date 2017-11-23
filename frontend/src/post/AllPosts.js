@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import PostItem from './PostItem';
 import PostForm from './PostForm';
-import { fetchInitialPosts, fetchAddPost } from './action';
+import { fetchInitialPosts, resetPosts, fetchAddPost } from './action';
 
 class AllPosts extends Component {
   constructor(props) {
@@ -14,14 +14,14 @@ class AllPosts extends Component {
     this.handlePostForm = this.handlePostForm.bind(this)
     this.handleSubmitRequest = this.handleSubmitRequest.bind(this)
   }
-  componentDidMount() {    
+  componentDidMount() {
+    this.props.dispatchResetPosts()
     this.props.dispatchFetchInitialPosts()
   }
   handlePostForm() {
   	this.setState({openPostForm: !this.state.openPostForm})
   }
   handleSubmitRequest(post) {
-    console.log(post)
   	this.props.dispatchFetchAddPost(post,this.props.posts)
     this.setState({ openPostForm: false })
   }
@@ -36,7 +36,7 @@ class AllPosts extends Component {
       		<PostForm category={categoryNameParam} onSubmitRequest={this.handleSubmitRequest}/>
       	}
       	{posts.map((post) => 
-             post.id && <PostItem key={post.id} post={post} categoryOfThisPost={post.category}/>      
+             post.id && !post.deleted && <PostItem key={post.id} post={post} categoryOfThisPost={post.category}/>      
         )}
       </div>
     )
@@ -57,6 +57,7 @@ function mapStateToProps (state, ownProps) {
 
 const mapDispatchToProps = (dispatch) => ({
   	dispatchFetchInitialPosts: () => dispatch(fetchInitialPosts()),
+  	dispatchResetPosts: () => dispatch(resetPosts()),
   	dispatchFetchAddPost: (post, posts) => dispatch(fetchAddPost(post, posts))
 })
 
